@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        overflow: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .counter {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 18px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.78);
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #9147ff;
+        box-shadow: 0 0 10px #9147ff;
+    }
+
+    .label {
+        opacity: 0.9;
+        font-size: 20px;
+    }
+
+    #count {
+        font-size: 28px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="counter">
+    <span class="dot"></span>
+    <span class="label">SUBS</span>
+    <span id="count">0</span>
+</div>
+
+<script>
+async function updateSubs() {
+    try {
+        const response = await fetch("/api/subscribers");
+        const data = await response.json();
+
+        if (data.total !== undefined) {
+            document.getElementById("count").textContent =
+                Number(data.total).toLocaleString();
+        }
+    } catch (error) {
+        console.log("Waiting for Twitch connection...");
+    }
+}
+
+updateSubs();
+setInterval(updateSubs, 30000);
+</script>
+
+</body>
+</html>
